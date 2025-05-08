@@ -2,7 +2,7 @@ import { Project } from "../models/projectSchema.js";
 import ErrorHandler from "../utils/ErrorHandler.js";
 
 export const isProjectMemberOrFounder = async (req, res, next) => {
-  const { projectId } = req.query;
+  const { projectId } = req.params;
   const project = await Project.findById(projectId);
 
   if (!project) return next(new ErrorHandler("Project not found", 404));

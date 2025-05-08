@@ -24,26 +24,34 @@ export const postComment = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const addReplyToComment = catchAsyncErrors(async (req, res, next) => {
-    const { commentId } = req.params;
-    const { message } = req.body;
-    const sender = req.user.email;
-  
-    const comment = await Comment.findById(commentId);
-    if (!comment) return next(new ErrorHandler("Comment not found", 404));
-  
-    // Add reply
-    comment.replies.push({
-      sender,
-      message,
-    });
-  
-    await comment.save();
-  
-    res.status(200).json({
-      success: true,
-      message: "Reply added successfully",
-      comment,
-    });
+  const { commentId } = req.params;
+  const { message } = req.body;
+  const sender = req.user.email;
+
+  const comment = await Comment.findById(commentId).populate("project");
+  if (!comment) return next(new ErrorHandler("Comment not found", 404));
+
+  const project = comment.project;
+
+  if (
+    project.founder.toString() !== req.user._id.toString() &&
+    !project.coWorkers.includes(sender)
+  ) {
+    return next(new ErrorHandler("Access denied", 403));
+  }
+
+  comment.replies.push({
+    sender,
+    message,
+  });
+
+  await comment.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Reply added successfully",
+    comment,
+  });
 });
   
 
