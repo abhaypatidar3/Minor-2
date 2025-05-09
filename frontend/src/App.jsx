@@ -11,6 +11,7 @@ import UpdateProfile from './components/UpdateProfile';
 import ContactUs from './components/ContactUs';
 import FAQ from './components/FAQ';
 import About from './components/About';
+import SearchBySkill from './components/SerachBySkill';
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/contactus"  element={<ContactUs />} />
           <Route path="/faq"  element={<FAQ />} />
            <Route path="/about"  element={<About />} />
+            <Route path="/searchbyskill"  element={<SearchBySkill />} />
         </Routes>
 
       </main>
