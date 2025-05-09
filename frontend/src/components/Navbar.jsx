@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
@@ -7,27 +8,41 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#" className="text-2xl font-bold">
+            <Link to="/" className="text-2xl font-bold flex">
               <span className="text-white">Skill</span>
               <span className="text-yellow-400">Swap</span>
-            </a>
+            </Link>
           </div>
 
           {/* Navigation Links */}
           <div className="flex items-center space-x-8">
-            <a href="#" className="text-white hover:text-yellow-400">Home</a>
-            <a href="#" className="text-white hover:text-yellow-400">Explore</a>
-            <a href="#" className="text-white hover:text-yellow-400">About Us</a>
-            <a href="#" className="text-white hover:text-yellow-400">Contact Us</a>
-            <a href="#" className="text-white hover:text-yellow-400">FAQs</a>
+            <Link to="/" className="text-white hover:text-yellow-400">
+              Home
+            </Link>
+            <Link to="/explore" className="text-white hover:text-yellow-400">
+              Explore
+            </Link>
+            <Link to="/about-us" className="text-white hover:text-yellow-400">
+              About Us
+            </Link>
+            <Link to="/contact-us" className="text-white hover:text-yellow-400">
+              Contact Us
+            </Link>
+            <Link to="/faqs" className="text-white hover:text-yellow-400">
+              FAQs
+            </Link>
           </div>
 
           {/* Auth Buttons */}
           <div className="flex items-center">
-            <div className="bg-yellow-400 rounded-full flex items-center px-4 py-2">
-              <a href="#" className="text-black">Login</a>
-              <span className="border-l border-black h-4 mx-2"></span>
-              <a href="#" className="text-black">Sign up</a>
+            <div className="bg-yellow-400 rounded-full flex items-center px-4 py-2 space-x-2">
+              <Link to="/login" className="text-black">
+                Login
+              </Link>
+              <span className="border-l border-black h-4" />
+              <Link to="/register" className="text-black">
+                Sign up
+              </Link>
             </div>
           </div>
         </div>
