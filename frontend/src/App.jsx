@@ -9,6 +9,7 @@ import ExploreProfile from './components/ExploreProfile';
 import ProfileReviews from './components/ProfileReview';
 import UpdateProfile from './components/UpdateProfile';
 import ContactUs from './components/ContactUs';
+import FAQ from './components/FAQ';
 
 export default function App() {
   return (
@@ -26,7 +27,9 @@ export default function App() {
           <Route path="/profilereview"  element={<ProfileReviews />} />
           <Route path="/footer"  element={<Footer />} />
           <Route path="/contactus"  element={<ContactUs />} />
+          <Route path="/faq"  element={<FAQ />} />
         </Routes>
+
       </main>
 
       <Footer />
