@@ -8,6 +8,7 @@ import Explore from './components/Explore';
 import ExploreProfile from './components/ExploreProfile';
 import ProfileReviews from './components/ProfileReview';
 import UpdateProfile from './components/UpdateProfile';
+import ContactUs from './components/ContactUs';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/updateProfile"  element={<UpdateProfile />} />
           <Route path="/profilereview"  element={<ProfileReviews />} />
           <Route path="/footer"  element={<Footer />} />
+          <Route path="/contactus"  element={<ContactUs />} />
         </Routes>
       </main>
 
