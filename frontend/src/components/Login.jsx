@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import client from '../api/client';
 
-const Login = () => {
-  const [credentials, setCredentials] = useState({
-    email: '',
-    password: ''
-  });
+export default function Login() {
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setCredentials(prev => ({ ...prev, [name]: value }));
+    setCredentials(c => ({ ...c, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    // TODO: add authentication logic
-    console.log('Login with:', credentials);
+    setError('');
+    try {
+      await client.post('/user/login', credentials);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed');
+    }
   };
 
   return (
@@ -24,40 +29,25 @@ const Login = () => {
         <h2 className="text-3xl font-bold text-yellow-400 text-center">
           Welcome Back
         </h2>
-        <p className="mt-2 text-gray-400 text-center">
-          Log in to your SkillSwap account.
-        </p>
-
+        {error && <p className="mt-2 text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-gray-300 mb-1">
-              Email
-            </label>
+            <label htmlFor="email" className="block text-gray-300 mb-1">Email</label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              value={credentials.email}
-              onChange={handleChange}
-              required
-              className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition"
+              id="email" name="email" type="email"
+              value={credentials.email} onChange={handleChange} required
+              className="w-full bg-gray-800 text-white border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-gray-300 mb-1">
-              Password
-            </label>
+            <label htmlFor="password" className="block text-gray-300 mb-1">Password</label>
             <input
-              id="password"
-              name="password"
-              type="password"
-              value={credentials.password}
-              onChange={handleChange}
-              required
-              className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition"
+              id="password" name="password" type="password"
+              value={credentials.password} onChange={handleChange} required
+              className="w-full bg-gray-800 text-white border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400"
             />
           </div>
 
@@ -71,13 +61,9 @@ const Login = () => {
 
         <p className="mt-4 text-center text-gray-500">
           Don’t have an account?{' '}
-          <Link to="/register" className="text-yellow-400 hover:underline">
-            Sign up
-          </Link>
+          <Link to="/register" className="text-yellow-400 hover:underline">Sign up</Link>
         </p>
       </div>
     </div>
   );
-};
-
-export default Login;
+}
