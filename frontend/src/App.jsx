@@ -23,6 +23,7 @@ export default function App() {
           <Route path="/exploreProfile" element={<ExploreProfile />} />
           <Route path="/updateProfile"  element={<UpdateProfile />} />
           <Route path="/profilereview"  element={<ProfileReviews />} />
+          <Route path="/footer"  element={<Footer />} />
         </Routes>
       </main>
 
