@@ -142,6 +142,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
 });  
 
 
+
 export const searchUsersBySkill = async (req, res, next) => {
   const { skill } = req.query;
 

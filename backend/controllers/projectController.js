@@ -280,6 +280,24 @@ export const handleJoinRequest = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+export const updateproject = catchAsyncErrors(async(req, res, next)=>{
+  const {projectId} = req.params;
+  const {name, status, projectType} = req.body;
+  const project = await Project.findById(projectId);
+  if(!project){
+    return next(new ErrorHandler("no project found", 404));
+  }
+  if(name) project.name = name;
+  if(status) project.status = status;
+  if(projectType) project.projectType = projectType;
+  await project.save();
+  res.status(200).json({
+    success : true,
+    message : "project updated successfully",
+    project,
+  });
+});
+
 export const getPendingJoinRequests = catchAsyncErrors(async (req, res, next) => {
   const { projectId } = req.params;
 

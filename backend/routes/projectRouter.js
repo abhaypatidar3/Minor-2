@@ -1,5 +1,5 @@
 import express from "express";
-import { createProject, addCoWorker, acceptCoWorker, getProjectDetails, getProjects, getAllProjects, requestToJoinProject, handleJoinRequest, getPendingJoinRequests, getRecommendedProjects, getMyProjects, leaveProject, getMyJoinedProjects, sendProjectRequestToUser} from "../controllers/projectController.js";
+import { createProject, addCoWorker, acceptCoWorker, getProjectDetails, getProjects, getAllProjects, requestToJoinProject, handleJoinRequest, getPendingJoinRequests, getRecommendedProjects, getMyProjects, leaveProject, getMyJoinedProjects, sendProjectRequestToUser, updateproject} from "../controllers/projectController.js";
 import { isAuthenticatedUser } from "../middlewares/auth.js";
 import { getUserNotifications} from "../controllers/notificationController.js";
 
@@ -32,5 +32,6 @@ router.put("/:projectId/leave", isAuthenticatedUser, leaveProject);
 router.get("/my-projects",isAuthenticatedUser, getMyJoinedProjects);
 router.get("/notification", isAuthenticatedUser, getUserNotifications);
 router.post("/:projectId/request-user", isAuthenticatedUser, sendProjectRequestToUser);
+router.put("/updateproject/:projectId", isAuthenticatedUser, updateproject);
 
 export default router;
