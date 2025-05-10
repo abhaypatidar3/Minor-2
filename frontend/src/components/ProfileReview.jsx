@@ -50,7 +50,7 @@ const menuItems = [
 const ProfileReviews = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <h1 className="text-3xl font-semibold text-gray-900 mb-6">Welcome back, Aastha!</h1>
+      <h1 className="text-3xl font-semibold text-gray-900 mb-6">Welcome back, Abhishek!</h1>
       <div className="bg-white rounded-lg shadow-lg flex overflow-hidden">
         {/* Sidebar */}
         <aside className="w-64 bg-gray-200 p-6">

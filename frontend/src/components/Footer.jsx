@@ -1,34 +1,66 @@
-import React from 'react';
-import { FaInstagram, FaLinkedin, FaFacebook, FaTwitter } from 'react-icons/fa';
+import React from "react";
+import {
+  FaInstagram,
+  FaLinkedinIn,
+  FaFacebookF,
+  FaTimes,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 rounded-lg ">
-      <div className="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row items-start">
-        {/* Left Section */}
+    <footer className="bg-black text-white px-6 py-10 rounded-t-xl">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start">
+        {/* Left section */}
         <div className="md:w-1/2 mb-8 md:mb-0">
-          <h2 className="text-6xl font-bold text-gray-300">SkillSwap</h2>
-          <p className="mt-2 text-gray-500">Find Your Match, Fuel Your Mission.</p>
+          <h2 className="text-5xl font-bold">
+            <span className="text-gray-400">Skill</span>
+            Swap
+          </h2>
+          <p className="mt-2 text-sm text-gray-500">
+            Find Your Match, Fuel Your Mission.
+          </p>
         </div>
 
-        {/* Divider and Links + Social Icons */}
-        <div className="md:w-2/4 flex">
-          {/* Links Column */}
-          <ul className="flex-1 space-y-2 pr-8 border-r border-gray-700">
-            <li><a href="#" className="text-gray-400 hover:text-white">Terms &amp; Conditions</a></li>
-            <li><a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a></li>
-            <li><a href="#" className="text-gray-400 hover:text-white">About SkillSwap</a></li>
-            <li><a href="#" className="text-gray-400 hover:text-white">Our Team</a></li>
-            <li><a href="#" className="text-gray-400 hover:text-white">About Us</a></li>
-            <li><a href="#" className="text-gray-400 hover:text-white">Contact Us</a></li>
+        {/* center divider */}
+        <div className="hidden md:block h-24 border-l border-gray-700 mx-8" />
+
+        {/* Right section */}
+        <div className="md:w-1/2 flex">
+          {/* Links */}
+          <ul className="flex-1 space-y-2 text-sm">
+            {[
+              "Terms & Conditions",
+              "Privacy Policy",
+              "About SkillSwap",
+              "Our Team",
+              "About Us",
+              "Contact Us",
+            ].map((text) => (
+              <li key={text}>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  {text}
+                </a>
+              </li>
+            ))}
           </ul>
 
-          {/* Social Icons Column */}
-          <div className="flex flex-col justify-start items-center ml-8 space-y-4">
-            <a href="#" className="text-gray-400 hover:text-white text-xl"><FaInstagram /></a>
-            <a href="#" className="text-gray-400 hover:text-white text-xl"><FaLinkedin /></a>
-            <a href="#" className="text-gray-400 hover:text-white text-xl"><FaFacebook /></a>
-            <a href="#" className="text-gray-400 hover:text-white text-xl"><FaTwitter /></a>
+          {/* Social icons */}
+          <div className="flex flex-col ml-8 space-y-4 text-xl">
+            <a href="#" className="text-gray-400 hover:text-white">
+              <FaInstagram />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <FaLinkedinIn />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <FaFacebookF />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <FaTimes />
+            </a>
           </div>
         </div>
       </div>

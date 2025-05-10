@@ -1,60 +1,86 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  HiOutlineUser,
+  HiOutlineMail,
+  HiOutlineLockClosed,
+  HiOutlinePhone,
+  HiOutlineHome,
+  HiOutlineHashtag,
+  HiOutlineEye,
+  HiOutlineEyeOff,
+} from 'react-icons/hi';
+import client from '../api/client';
 
-const Register = () => {
+export default function Register() {
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: '',
+    phone: '',
+    address: '',
     firstSkill: '',
     secondSkill: '',
     thirdSkill: '',
-    address: ''
   });
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(fd => ({ ...fd, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    // TODO: form validation and submission logic
-    console.log('Register data:', formData);
+    setError('');
+    try {
+      await client.post('/user/register', formData);
+      navigate('/login');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed');
+    }
   };
+
+  const inputClasses =
+    'w-full pl-10 pr-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-yellow-400';
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-gray-900 rounded-2xl p-8 shadow-lg">
-        <h2 className="text-3xl font-bold text-yellow-400 text-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center px-4">
+      <div className="w-full max-w-lg bg-gray-800 rounded-2xl p-8 shadow-xl transform hover:-translate-y-1 transition-all">
+        <h2 className="text-3xl font-bold text-center text-yellow-400">
           Create Your SkillSwap Account
         </h2>
-        <p className="mt-2 text-gray-400 text-center">
-          Sign up to start sharing and exchanging skills.
-        </p>
+        {error && (
+          <p className="mt-4 text-red-500 text-center">
+            {error}
+          </p>
+        )}
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          {/* Username */}
-          <div>
-            <label htmlFor="username" className="block text-gray-300 mb-1">
-              Username
-            </label>
+        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+          {/* Name */}
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+              <HiOutlineUser size={20} />
+            </span>
             <input
-              id="username"
-              name="username"
+              id="name"
+              name="name"
               type="text"
-              value={formData.username}
+              value={formData.name}
               onChange={handleChange}
               required
-              className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition"
+              placeholder="Full Name"
+              className={inputClasses}
             />
           </div>
 
           {/* Email */}
-          <div>
-            <label htmlFor="email" className="block text-gray-300 mb-1">
-              Email
-            </label>
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+              <HiOutlineMail size={20} />
+            </span>
             <input
               id="email"
               name="email"
@@ -62,105 +88,106 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition"
+              placeholder="Email Address"
+              className={inputClasses}
             />
           </div>
 
           {/* Password */}
-          <div>
-            <label htmlFor="password" className="block text-gray-300 mb-1">
-              Password
-            </label>
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+              <HiOutlineLockClosed size={20} />
+            </span>
             <input
               id="password"
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition"
+              placeholder="Password"
+              className={`${inputClasses} pr-12`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(v => !v)}
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <HiOutlineEyeOff size={20} /> : <HiOutlineEye size={20} />}
+            </button>
+          </div>
+
+          {/* Phone */}
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+              <HiOutlinePhone size={20} />
+            </span>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              placeholder="Phone Number"
+              className={inputClasses}
+            />
+          </div>
+
+          {/* Address */}
+          <div className="relative">
+            <span className="absolute top-2 left-0 flex items-start pl-3 text-gray-400">
+              <HiOutlineHome size={20} />
+            </span>
+            <textarea
+              id="address"
+              name="address"
+              rows="2"
+              value={formData.address}
+              onChange={handleChange}
+              required
+              placeholder="Address"
+              className={`${inputClasses} resize-none pl-10 py-2`}
             />
           </div>
 
           {/* Skills */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="firstSkill" className="block text-gray-300 mb-1">
-                First Skill
-              </label>
-              <input
-                id="firstSkill"
-                name="firstSkill"
-                type="text"
-                value={formData.firstSkill}
-                onChange={handleChange}
-                required
-                className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition"
-              />
-            </div>
-            <div>
-              <label htmlFor="secondSkill" className="block text-gray-300 mb-1">
-                Second Skill
-              </label>
-              <input
-                id="secondSkill"
-                name="secondSkill"
-                type="text"
-                value={formData.secondSkill}
-                onChange={handleChange}
-                required
-                className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition"
-              />
-            </div>
-            <div>
-              <label htmlFor="thirdSkill" className="block text-gray-300 mb-1">
-                Third Skill
-              </label>
-              <input
-                id="thirdSkill"
-                name="thirdSkill"
-                type="text"
-                value={formData.thirdSkill}
-                onChange={handleChange}
-                required
-                className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition"
-              />
-            </div>
-          </div>
-
-          {/* Address */}
-          <div>
-            <label htmlFor="address" className="block text-gray-300 mb-1">
-              Address
-            </label>
-            <textarea
-              id="address"
-              name="address"
-              rows="3"
-              value={formData.address}
-              onChange={handleChange}
-              required
-              className="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 transition resize-none"
-            ></textarea>
+            {['firstSkill', 'secondSkill', 'thirdSkill'].map((field, i) => (
+              <div key={field} className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                  <HiOutlineHashtag size={20} />
+                </span>
+                <input
+                  id={field}
+                  name={field}
+                  type="text"
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  placeholder={`Skill ${i + 1}`}
+                  className={inputClasses}
+                />
+              </div>
+            ))}
           </div>
 
           <button
             type="submit"
-            className="w-full bg-yellow-400 text-black font-semibold py-2 rounded-full hover:opacity-90 transition"
+            className="w-full mt-2 bg-yellow-400 text-black font-semibold py-2 rounded-full hover:opacity-90 transition"
           >
             Register
           </button>
         </form>
 
-        <p className="mt-4 text-center text-gray-500">
+        <p className="mt-6 text-center text-gray-400">
           Already have an account?{' '}
-          <Link to="/login" className="text-yellow-400 hover:underline">
+          <Link to="/login" className="text-yellow-400 hover:underline transition">
             Log in
           </Link>
         </p>
       </div>
     </div>
   );
-};
-
-export default Register;
+}
