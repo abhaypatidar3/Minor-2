@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -16,9 +17,12 @@ const Home = () => {
           <p className="mt-4 text-lg text-yellow-400">
             You are at the right place.
           </p>
-          <button className="mt-8 bg-yellow-400 text-black font-medium px-6 py-3 rounded-full hover:opacity-90">
+          <Link
+            to="/explore"
+            className="mt-8 bg-yellow-400 text-black font-medium px-6 py-3 rounded-full hover:opacity-90"
+          >
             Get Started
-          </button>
+          </Link>
         </div>
 
         {/* Image */}

@@ -83,12 +83,12 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-        return next(await ErrorHandler("Invalid email or password.", 400));
+        return next(new ErrorHandler("Invalid email or password.", 400));
     }
 
     const isPasswordMatched = await user.comparePassword(password);
     if (!isPasswordMatched) {
-        return next(await ErrorHandler("Invalid email or password.", 400));
+        return next(new ErrorHandler("Invalid email or password.", 400));
     }
 
     sendToken(user, 200, res, "User logged in successfully.");
@@ -166,6 +166,14 @@ export const searchUsersBySkill = async (req, res, next) => {
   });
 };
 
+export const getAllUsers = catchAsyncErrors(async (req, res, next) => {
+  const users = await User.find().select("-password"); 
+
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});
 
 
 // import {catchAsyncErrors} from "../middlewares/catchAsyncErrors.js";
