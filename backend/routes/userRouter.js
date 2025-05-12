@@ -1,5 +1,5 @@
 import express from "express";
-import { getMyProfile, login, logout, register, searchUsersBySkill, updateProfile } from "../controllers/userController.js"
+import { getAllUsers, getMyProfile, login, logout, register, searchUsersBySkill, updateProfile } from "../controllers/userController.js"
 import { isAuthenticatedUser } from "../middlewares/auth.js";
 import { getProjectDetails } from "../controllers/projectController.js";
 
@@ -14,4 +14,5 @@ router.get("/me", isAuthenticatedUser, getMyProfile);
 router.put("/me/update", isAuthenticatedUser, updateProfile);
 router.get("/search", isAuthenticatedUser, searchUsersBySkill);
 
+router.get("/all", isAuthenticatedUser, getAllUsers);
 export default router;
