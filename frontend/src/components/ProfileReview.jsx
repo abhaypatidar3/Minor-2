@@ -36,45 +36,14 @@ const sampleReviews = [
   }
 ];
 
-const menuItems = [
-  { key: 'Overview', icon: <FiList /> },
-  { key: 'Update Profile', icon: <FiEdit /> },
-  { key: 'Add a Project', icon: <FiPlus /> },
-  { key: 'Requests', icon: <FiClipboard /> },
-  { key: 'Bookmarks', icon: <FiBookmark /> },
-  { key: 'Reviews', icon: <FiStar /> },
-  { key: 'Payment History', icon: <FiUser /> },
-  { key: 'Settings', icon: <FiSettings /> }
-];
+
 
 const ProfileReviews = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <h1 className="text-3xl font-semibold text-gray-900 mb-6">Welcome back, Abhishek!</h1>
       <div className="bg-white rounded-lg shadow-lg flex overflow-hidden">
-        {/* Sidebar */}
-        <aside className="w-64 bg-gray-200 p-6">
-          <div className="flex flex-col items-center mb-8">
-            <img
-              src="/image/avatar.png"
-              alt="Aastha Avatar"
-              className="w-24 h-24 rounded-full mb-4"
-            />
-            <h2 className="text-xl font-semibold text-gray-800">Aastha Kanade</h2>
-          </div>
-          <nav className="flex flex-col space-y-4">
-            {menuItems.map(item => (
-              <a
-                key={item.key}
-                href="#"
-                className={`flex items-center space-x-2 text-gray-700 hover:text-gray-900 ${item.key === 'Reviews' ? 'font-medium' : ''}`}
-              >
-                {item.icon}
-                <span>{item.key}</span>
-              </a>
-            ))}
-          </nav>
-        </aside>
+        
 
         {/* Main Content */}
         <main className="flex-1 p-8">

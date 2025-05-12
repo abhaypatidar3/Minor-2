@@ -9,6 +9,7 @@ export default function Project() {
   const [openOnly, setOpenOnly] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [requestStatus, setRequestStatus] = useState({});
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -16,25 +17,21 @@ export default function Project() {
       try {
         const res = await client.get("/projects");
         const data = res.data.projects || res.data;
-        const adapted = data.map((p) => {
-          // normalize skills
-          let skillsArr = Array.isArray(p.skills)
+        const adapted = data.map((p) => ({
+          id: p._id,
+          title: p.title || p.name || "Untitled",
+          image: p.imageUrl || "/image/project.png",
+          skills: Array.isArray(p.skills)
             ? p.skills
             : p.skills && typeof p.skills === "object"
             ? Object.values(p.skills)
-            : [];
-          return {
-            id: p._id,
-            title: p.title || p.name || "Untitled",
-            image: p.imageUrl || "/image/project.png",
-            skills: skillsArr,
-            projectType: p.type || "General",
-            description: p.description || "",
-            duration: p.duration || "N/A",
-            coWorkers: p.coWorkers || [],
-            status: p.status === "open" ? "OPEN" : "CLOSED",
-          };
-        });
+            : [],
+          projectType: p.type || "General",
+          description: p.description || "",
+          duration: p.duration || "N/A",
+          coWorkers: p.coWorkers || [],
+          status: p.status === "open" ? "OPEN" : "CLOSED",
+        }));
         setProjects(adapted);
       } catch (err) {
         console.error(err);
@@ -45,6 +42,21 @@ export default function Project() {
     };
     fetchProjects();
   }, []);
+
+  const handleRequest = async (projectId) => {
+    setRequestStatus((s) => ({ ...s, [projectId]: 'loading' }));
+    try {
+      // Send request without an empty body to match backend expectations
+      await client.post(`/projects/request/${projectId}`);
+      setRequestStatus((s) => ({ ...s, [projectId]: 'requested' }));
+    } catch (err) {
+      console.error(err);
+      // Capture and show backend error message if any
+      const msg = err.response?.data?.message || 'Failed to request';
+      setRequestStatus((s) => ({ ...s, [projectId]: 'error' }));
+      alert(`Unable to send request: ${msg}`);
+    }
+  };
 
   const filtered = useMemo(() => {
     return projects.filter((p) => {
@@ -68,7 +80,6 @@ export default function Project() {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Header Image */}
       <div
         className="h-64 bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: "url('/image/ExploreProfileImage.png')" }}
@@ -76,7 +87,6 @@ export default function Project() {
         <h1 className="text-4xl text-white font-semibold">Explore Projects</h1>
       </div>
 
-      {/* Filters */}
       <div className="max-w-5xl mx-auto p-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
         <div className="flex-1 flex items-center border border-gray-300 rounded-lg overflow-hidden">
           <input
@@ -96,7 +106,6 @@ export default function Project() {
           className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none"
         >
           <option value="All">All Category</option>
-          {/* derive categories dynamically? */}
           <option value="UI/UX Design">UI/UX Design</option>
           <option value="MERN Stack">MERN Stack</option>
         </select>
@@ -117,14 +126,17 @@ export default function Project() {
         </div>
       </div>
 
-      {/* Project Cards */}
       <div className="max-w-5xl mx-auto grid grid-cols-1 gap-6 p-6">
         {filtered.map((p) => (
           <div
             key={p.id}
             className="flex bg-gray-50 border border-gray-200 rounded-lg overflow-hidden"
           >
-            <img src={p.image} alt={p.title} className="w-32 h-32 object-cover" />
+            <img
+              src={p.image}
+              alt={p.title}
+              className="w-32 h-32 object-cover"
+            />
             <div className="flex-1 p-4">
               <div className="flex justify-between items-start">
                 <h2 className="text-xl font-semibold text-gray-900">
@@ -160,8 +172,15 @@ export default function Project() {
               <p className="mt-1 text-gray-600 text-sm">
                 <strong>Co-Workers:</strong> {p.coWorkers.join(", ")}
               </p>
-              <button className="mt-4 bg-yellow-400 text-black px-4 py-2 rounded-full hover:opacity-90">
-                Request To Join
+              <button
+                onClick={() => handleRequest(p.id)}
+                className="mt-4 bg-yellow-400 text-black px-4 py-2 rounded-full hover:opacity-90"
+              >
+                {requestStatus[p.id] === 'loading'
+                  ? 'Requesting...'
+                  : requestStatus[p.id] === 'requested'
+                  ? 'Requested'
+                  : 'Request To Join'}
               </button>
             </div>
             <button className="p-4 text-gray-600 hover:text-gray-900">
@@ -171,7 +190,6 @@ export default function Project() {
         ))}
       </div>
 
-      {/* Pagination */}
       <div className="max-w-5xl mx-auto flex justify-center items-center space-x-4 pb-8">
         <button className="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300">
           &lt;
