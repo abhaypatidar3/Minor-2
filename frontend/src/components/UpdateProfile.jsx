@@ -27,43 +27,14 @@ const UpdateProfile = () => {
     console.log('Update Profile', formData);
   };
 
-  const menuItems = [
-    'Overview',
-    'Update Profile',
-    'Add a Project',
-    'Requests',
-    'Bookmarks',
-    'Reviews',
-    'Payment History',
-    'Settings'
-  ];
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <h1 className="text-3xl font-semibold text-gray-900 mb-6">Welcome back, Aastha!</h1>
       <div className="bg-white rounded-lg shadow-lg flex overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-64 bg-gray-200 p-6">
-          <div className="flex flex-col items-center mb-8">
-            <img
-              src="/image/avatar.png"
-              alt="Aastha Avatar"
-              className="w-24 h-24 rounded-full mb-4"
-            />
-            <h2 className="text-xl font-semibold text-gray-800">Aastha Kanade</h2>
-          </div>
-          <nav className="flex flex-col space-y-4">
-            {menuItems.map(item => (
-              <a
-                key={item}
-                href="#"
-                className={`text-gray-700 hover:text-gray-900 ${item === 'Update Profile' ? 'font-medium' : ''}`}
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-        </aside>
+       
 
         {/* Main Content */}
         <main className="flex-1 p-8">

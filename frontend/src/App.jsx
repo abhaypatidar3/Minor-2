@@ -15,6 +15,8 @@ import SearchBySkill from "./components/SerachBySkill";
 import GetProfile from "./components/GetProfile";
 import HireTalent from "./components/HireTalent";
 import Project from "./components/Project";
+import CreateProject from "./components/CreateProject";
+import ProfileDashboard from "./components/GetProfile";
 
 export default function App() {
   return (
@@ -38,6 +40,8 @@ export default function App() {
           <Route path="/getprofile" element={<GetProfile />} />
           <Route path="/hireme" element={<HireTalent />} />
           <Route path='/projects' element={<Project />} />
+          <Route path='/createprojects' element={<CreateProject />} />
+          <Route path="/profile" element={<ProfileDashboard />} />
         </Routes>
       </main>
 
