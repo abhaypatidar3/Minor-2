@@ -135,7 +135,7 @@ export const getProjects = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const getAllProjects = catchAsyncErrors(async (req, res, next) => {
-  const { skills, status, search, page = 1, limit = 10, projectType } = req.query;
+  const { skills, status, search, page = 1, limit = 1000, projectType } = req.query;
 
   const query = {};
 

@@ -45,27 +45,27 @@ export const register = catchAsyncErrors(async (req, res, next) => {
             status,
         };
 
-        if (req.files && req.files.resume) {
-            const { resume } = req.files;
-            if (resume) {
-                try {
-                    const cloudinaryResponse = await cloudinary.uploader.upload(resume.tempFilePath, {
-                        folder: "User_Resume",
-                    });
+        // if (req.files && req.files.resume) {
+        //     const { resume } = req.files;
+        //     if (resume) {
+        //         try {
+        //             const cloudinaryResponse = await cloudinary.uploader.upload(resume.tempFilePath, {
+        //                 folder: "User_Resume",
+        //             });
 
-                    if (!cloudinaryResponse || cloudinaryResponse.error) {
-                        return next(new ErrorHandler("Failed to upload resume to cloud.", 500));
-                    }
+        //             if (!cloudinaryResponse || cloudinaryResponse.error) {
+        //                 return next(new ErrorHandler("Failed to upload resume to cloud.", 500));
+        //             }
 
-                    userData.resume = {
-                        public_id: cloudinaryResponse.public_id,
-                        url: cloudinaryResponse.secure_url,
-                    };
-                } catch (error) {
-                    return next(new ErrorHandler("Failed to upload resume.", 500));
-                }
-            }
-        }
+        //             userData.resume = {
+        //                 public_id: cloudinaryResponse.public_id,
+        //                 url: cloudinaryResponse.secure_url,
+        //             };
+        //         } catch (error) {
+        //             return next(new ErrorHandler("Failed to upload resume.", 500));
+        //         }
+        //     }
+        // }
 
         const user = await User.create(userData);
         sendToken(user, 201, res, "User Registered.");
@@ -108,7 +108,7 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 // Get logged-in user's profile
 export const getMyProfile = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.user._id);
-  
+   
     res.status(200).json({
       success: true,
       user,

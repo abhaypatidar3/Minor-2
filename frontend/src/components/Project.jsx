@@ -15,7 +15,7 @@ export default function Project() {
     const fetchProjects = async () => {
       setLoading(true);
       try {
-        const res = await client.get("/projects");
+        const res = await client.get("/projects/");
         const data = res.data.projects || res.data;
         const adapted = data.map((p) => ({
           id: p._id,
@@ -26,7 +26,7 @@ export default function Project() {
             : p.skills && typeof p.skills === "object"
             ? Object.values(p.skills)
             : [],
-          projectType: p.type || "General",
+          projectType: p.projectType || "General",
           description: p.description || "",
           duration: p.duration || "N/A",
           coWorkers: p.coWorkers || [],
