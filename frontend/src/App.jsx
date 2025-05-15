@@ -17,6 +17,7 @@ import HireTalent from "./components/HireTalent";
 import Project from "./components/Project";
 import CreateProject from "./components/CreateProject";
 import ProfileDashboard from "./components/GetProfile";
+import MyProjects from "./components/MyProject";
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
           <Route path='/projects' element={<Project />} />
           <Route path='/createprojects' element={<CreateProject />} />
           <Route path="/profile" element={<ProfileDashboard />} />
+          <Route path="/myproject" element={<MyProjects />} />
         </Routes>
       </main>
 

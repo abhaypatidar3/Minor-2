@@ -4,15 +4,16 @@ import client from '../api/client';
 import UpdateProfile from './UpdateProfile';
 import CreateProject from './CreateProject';
 import ProfileReviews from './ProfileReview';
+import MyProjects from './MyProject';
 
 const menuItems = [
   'Overview',
   'Update Profile',
   'Add a Project',
   'Requests',
-  'Bookmarks',
+  'My Projects',
+  'Co-Worker project',
   'Reviews',
-  'Payment History',
   'Settings'
 ];
 
@@ -85,6 +86,8 @@ export default function ProfileDashboard() {
         return <CreateProject />;  
       case 'Reviews':
         return <ProfileReviews />;  
+      case 'My Projects':
+        return <MyProjects/>;
       default:
         return <p>{activeTab} content coming soon...</p>;
     }

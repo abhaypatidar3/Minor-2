@@ -1,152 +1,126 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiPlus } from 'react-icons/fi';
+import client from '../api/client';
 
-const UpdateProfile = () => {
+export default function UpdateProfile() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    profession: '',
-    location: '',
-    skills: '',
+    firstName: '', lastName: '',
+    skillsText: '',  // comma-separated input
     about: ''
   });
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-  const handleChange = (e) => {
+  // Load current user data
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await client.get('/user/me');
+        const u = res.data.user;
+        setFormData({
+          firstName: u.name || '',
+          skillsText: Array.isArray(u.skills)
+            ? u.skills.join(', ')
+            : (u.skills && typeof u.skills === 'object'
+                ? Object.values(u.skills).join(', ')
+                : ''),
+          about: u.about || ''
+        });
+      } catch {
+        setError('Failed to load user data');
+      }
+    })();
+  }, []);
+
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(fd => ({ ...fd, [name]: value }));
   };
 
   const handleAddSkill = () => {
-    // TODO: add skill logic
-    console.log('Add skill:', formData.skills);
+    if (formData.skillsText.trim()) {
+      setFormData(fd => ({ skillsText: fd.skillsText + ', ' }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    // TODO: submit update logic
-    console.log('Update Profile', formData);
+    setMessage(''); setError('');
+
+    // split into up to three skills
+    const parts = formData.skillsText.split(',').map(s => s.trim());
+    const [firstSkill = '', secondSkill = '', thirdSkill = ''] = parts;
+
+    try {
+      await client.put('/user/me/update', {
+        name: formData.firstName,
+        skills: { firstSkill, secondSkill, thirdSkill },
+        status: 'active',
+        about: formData.about
+      });
+      setMessage('Profile updated successfully!');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Update failed');
+    }
   };
-
-
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <h1 className="text-3xl font-semibold text-gray-900 mb-6">Welcome back, Aastha!</h1>
-      <div className="bg-white rounded-lg shadow-lg flex overflow-hidden">
-        {/* Sidebar */}
-       
+      <h1 className="text-3xl font-semibold text-gray-900 mb-6">Update Profile</h1>
+      <div className="bg-white rounded-lg shadow p-8">
+        {message && <p className="text-green-600 mb-4">{message}</p>}
+        {error   && <p className="text-red-600 mb-4">{error}</p>}
 
-        {/* Main Content */}
-        <main className="flex-1 p-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2">Update Profile</h2>
-          <div className="border-b border-gray-300 mb-6" />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Full Name */}
+          <div>
+            <label className="block text-gray-700 mb-1">Name</label>
+            <input
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              placeholder="Full Name"
+              className="w-full border-gray-300 rounded-lg px-3 py-2 focus:ring-yellow-400 focus:outline-none focus:ring-2"
+            />
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name Fields */}
-            <div className="flex space-x-4">
-              <div className="flex-1">
-                <label className="block text-gray-700 mb-1">First Name:</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  placeholder="First Name"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-gray-700 mb-1">Last Name:</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  placeholder="Last Name"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                />
-              </div>
-            </div>
-
-            {/* Profession & Location */}
-            <div className="flex space-x-4">
-              <div className="flex-1">
-                <label className="block text-gray-700 mb-1">Profession:</label>
-                <select
-                  name="profession"
-                  value={formData.profession}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                >
-                  <option value="">Select Profession</option>
-                  <option>Developer</option>
-                  <option>Designer</option>
-                  <option>Product Manager</option>
-                </select>
-              </div>
-              <div className="flex-1">
-                <label className="block text-gray-700 mb-1">Location:</label>
-                <select
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                >
-                  <option value="">Select Location</option>
-                  <option>Indore</option>
-                  <option>West Bengal</option>
-                  <option>Mumbai</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Skills */}
-            <div className="flex items-end space-x-2">
-              <div className="flex-1">
-                <label className="block text-gray-700 mb-1">Skills:</label>
-                <input
-                  type="text"
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleChange}
-                  placeholder="Add a skill"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleAddSkill}
-                className="p-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
-              >
-                <FiPlus />
-              </button>
-            </div>
-
-            {/* About */}
-            <div>
-              <label className="block text-gray-700 mb-1">About:</label>
-              <textarea
-                name="about"
-                rows="4"
-                value={formData.about}
+          {/* Skills */}
+          <div className="flex items-end space-x-2">
+            <div className="flex-1">
+              <label className="block text-gray-700 mb-1">Skills (3 max)</label>
+              <input
+                name="skillsText"
+                value={formData.skillsText}
                 onChange={handleChange}
-                placeholder="Tell us about yourself"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
+                placeholder="e.g. frontend, backend, DSA"
+                className="w-full border-gray-300 rounded-lg px-3 py-2 focus:ring-yellow-400 focus:outline-none focus:ring-2"
               />
             </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="bg-yellow-400 text-black font-semibold px-6 py-2 rounded-full hover:opacity-90 transition"
-            >
-              Save Changes
+            <button type="button" onClick={handleAddSkill} className="p-2 bg-gray-300 rounded-lg hover:bg-gray-400">
+              <FiPlus />
             </button>
-          </form>
-        </main>
+          </div>
+
+          {/* About */}
+          <div>
+            <label className="block text-gray-700 mb-1">About</label>
+            <textarea
+              name="about"
+              value={formData.about}
+              onChange={handleChange}
+              rows="4"
+              className="w-full border-gray-300 rounded-lg px-3 py-2 focus:ring-yellow-400 focus:outline-none focus:ring-2 resize-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold hover:opacity-90 transition"
+          >
+            Save Changes
+          </button>
+        </form>
       </div>
     </div>
   );
-};
-
-export default UpdateProfile;
+}

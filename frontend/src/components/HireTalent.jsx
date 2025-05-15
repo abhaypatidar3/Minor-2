@@ -84,7 +84,7 @@ export default function HireTalent() {
             </div>
             <div className="mt-4 flex space-x-2">
               <Link
-                to={`/exploreProfile?user=${u.id}`}
+                to={`/profile/${u.id}`}
                 className="flex-1 text-center bg-yellow-400 text-black py-1 rounded-lg hover:opacity-90"
               >
                 View Profile
@@ -92,9 +92,7 @@ export default function HireTalent() {
               <button className="flex-1 text-center border border-gray-300 text-gray-800 py-1 rounded-lg hover:bg-gray-100">
                 Hire
               </button>
-              <button className="flex-1 text-center bg-gray-200 text-gray-800 py-1 rounded-lg hover:bg-gray-300">
-                Swap
-              </button>
+             
             </div>
           </div>
         ))}
