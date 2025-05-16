@@ -408,32 +408,38 @@ export const getMyJoinedProjects = catchAsyncErrors(async (req, res, next) => {
 // });
 
 export const sendProjectRequestToUser = catchAsyncErrors(async (req, res, next) => {
-  const { projectId } = req.params;
-  const { userEmail, proposedAmount } = req.body;
+  // const { projectId } = req.params;
+  const { userEmail, proposedAmount, projectName, description  } = req.body;
 
-  const project = await Project.findById(projectId).populate("founder");
-  if (!project) return next(new ErrorHandler("Project not found", 404));
+  if(userEmail.toString() === req.user.email.toString()){
+    return next(new ErrorHandler("you can not send request to yourself"));
+  }
+
+  // const project = await Project.findById(projectId).populate("founder");
+  // if (!project) return next(new ErrorHandler("Project not found", 404));
 
   const recipientUser = await User.findOne({ email: userEmail });
   if (!recipientUser) return next(new ErrorHandler("User not found", 404));
 
-  if (project.founder._id.toString() !== req.user._id.toString()) {
-    return next(new ErrorHandler("Only the founder can send requests", 403));
+  // if (project.founder._id.toString() !== req.user._id.toString()) {
+  //   return next(new ErrorHandler("Only the founder can send requests", 403));
+  // }
+
+  // let message = `${project.founder.name} (${project.founder.email}) has invited you to join the project "${project.name}".\n\n`;
+  let message = `${req.user.name} has invited you to join the project "${projectName}".\n\n`;
+  if(proposedAmount){
+    message += `Description: ${description}\nProject Type: paid`;
+    message += `\nProposed Payment: ₹${proposedAmount || 0}`;
   }
-
-  let message = `${project.founder.name} (${project.founder.email}) has invited you to join the project "${project.name}".\n\n`;
-  message += `Description: ${project.description}\nProject Type: ${project.projectType}`;
-
-  if (project.projectType === "paid") {
-    message += `\nProposed Payment: ₹${proposedAmount || project.budget || 0}`;
+  else if(!proposedAmount){
+    message += `Description: ${description}\nProject Type: exchange`;
   }
 
   await Notification.create({
     user: userEmail, // recipient
-    message: `${req.user.name} invited you to join the project ${project.name}`,
+    message: `${req.user.name} invited you to join the project ${projectName}`,
     type: "project-invite",
     metadata: {
-      projectId: project._id.toString(),
       senderEmail: req.user.email,
       proposedAmount: proposedAmount, // if it's paid
     },

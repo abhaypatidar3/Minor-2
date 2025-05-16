@@ -31,7 +31,7 @@ router.get("/recommended", isAuthenticatedUser, getRecommendedProjects);
 router.put("/:projectId/leave", isAuthenticatedUser, leaveProject);
 router.get("/my-projects",isAuthenticatedUser, getMyJoinedProjects);
 router.get("/notification", isAuthenticatedUser, getUserNotifications);
-router.post("/:projectId/request-user", isAuthenticatedUser, sendProjectRequestToUser);
+router.post("/request-user", isAuthenticatedUser, sendProjectRequestToUser);
 router.put("/updateproject/:projectId", isAuthenticatedUser, updateproject);
 
 export default router;
