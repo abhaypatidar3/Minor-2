@@ -131,7 +131,7 @@ const ExploreProfile = () => {
             <div className="mt-4 flex space-x-2">
               <button className="flex-1 bg-white border border-gray-300 text-gray-800 py-1 rounded-lg hover:bg-gray-200 transition">View Profile</button>
               <button className="flex-1 bg-yellow-400 text-black py-1 rounded-lg hover:opacity-90 transition">Hire</button>
-              <button className="flex-1 bg-gray-300 text-gray-800 py-1 rounded-lg hover:bg-gray-400 transition">Swap</button>
+              
             </div>
           </div>
         ))}

@@ -13,8 +13,7 @@ const menuItems = [
   'Requests',
   'My Projects',
   'Co-Worker project',
-  'Reviews',
-  'Settings'
+  'Reviews'
 ];
 
 export default function ProfileDashboard() {
