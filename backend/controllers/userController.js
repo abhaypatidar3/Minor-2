@@ -177,6 +177,25 @@ export const getAllUsers = catchAsyncErrors(async (req, res, next) => {
 });
 
 
+export const getUserProfileByEmail = catchAsyncErrors(async (req, res, next) => {
+  const emailParam = `${req.params.email}@gmail.com`;
+
+  // Decode URI if email has special characters (like @)
+  const email = decodeURIComponent(emailParam);
+
+  const user = await User.findOne({ email }).select("-password");
+
+  if (!user) {
+    return next(new ErrorHandler("User not found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+
 // import {catchAsyncErrors} from "../middlewares/catchAsyncErrors.js";
 // import ErrorHandler from "../middlewares/error.js";
 // import {User} from "../models/userSchema.js";
