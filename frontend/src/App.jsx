@@ -18,6 +18,9 @@ import Project from "./components/Project";
 import CreateProject from "./components/CreateProject";
 import ProfileDashboard from "./components/GetProfile";
 import MyProjects from "./components/MyProject";
+import Hire from "./components/Hire";
+import ViewOtherProfile from "./components/ViewOtherProfile";
+import Request from "./components/Request";
 
 export default function App() {
   return (
@@ -42,8 +45,14 @@ export default function App() {
           <Route path="/hireme" element={<HireTalent />} />
           <Route path='/projects' element={<Project />} />
           <Route path='/createprojects' element={<CreateProject />} />
-          <Route path="/profile" element={<ProfileDashboard />} />
+          {/* <Route path="/profile" element={<ProfileDashboard />} /> */}
           <Route path="/myproject" element={<MyProjects />} />
+                     <Route path="/profile/:username" element={<ViewOtherProfile />} />
+
+          <Route path="/hire/:username" element={<Hire />} />
+          +         <Route path="/notifications" element={<Request />} />
+
+          
         </Routes>
       </main>
 

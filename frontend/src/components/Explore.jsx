@@ -86,7 +86,7 @@ const Explore = () => {
             Update skills, bio, endorsements, availability.
           </p>
           <Link
-            to="/Profile"
+            to="/getProfile"
             className="self-end mt-6 bg-yellow-400 text-black font-medium py-2 px-4 rounded-full hover:opacity-90"
           >
             Explore

@@ -10,23 +10,27 @@ export default function HireTalent() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    (async () => {
       try {
         const res = await client.get('/user/all');
-        // assume res.data.users or res.data
         const data = res.data.users || res.data;
-        // normalize skills
         const adapted = data.map(u => {
           let skillsArr = [];
           if (Array.isArray(u.skills)) skillsArr = u.skills;
-          else if (u.skills && typeof u.skills === 'object') skillsArr = Object.values(u.skills);
+          else if (u.skills && typeof u.skills === 'object')
+            skillsArr = Object.values(u.skills);
+
+          // use email local-part as username
+          const username = u.email.split('@')[0];
+
           return {
             id: u._id,
+            username,
             name: u.name,
             avatar: u.avatarUrl || '/image/avatar.png',
             skills: skillsArr.join(', '),
-            rating: u.rating || '–',
-            reviews: u.reviews || 0,
+            rating: u.rating ?? '–',
+            reviews: u.reviews ?? 0,
           };
         });
         setUsers(adapted);
@@ -36,12 +40,11 @@ export default function HireTalent() {
       } finally {
         setLoading(false);
       }
-    };
-    fetchUsers();
+    })();
   }, []);
 
-  const filtered = useMemo(() =>
-    users.filter(u =>
+  const filtered = useMemo(
+    () => users.filter(u =>
       u.name.toLowerCase().includes(search.trim().toLowerCase())
     ),
     [users, search]
@@ -52,7 +55,6 @@ export default function HireTalent() {
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">
-      {/* Search */}
       <div className="max-w-4xl mx-auto flex items-center mb-6">
         <input
           type="text"
@@ -66,7 +68,6 @@ export default function HireTalent() {
         </button>
       </div>
 
-      {/* Grid */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filtered.length === 0 && (
           <p className="col-span-full text-center text-gray-500">No users found.</p>
@@ -83,16 +84,19 @@ export default function HireTalent() {
               </div>
             </div>
             <div className="mt-4 flex space-x-2">
+              {/* now link by username */}
               <Link
-                to={`/profile/${u.id}`}
+                to={`/profile/${u.username}`}
                 className="flex-1 text-center bg-yellow-400 text-black py-1 rounded-lg hover:opacity-90"
               >
                 View Profile
               </Link>
-              <button className="flex-1 text-center border border-gray-300 text-gray-800 py-1 rounded-lg hover:bg-gray-100">
+              <Link
+                to={`/hire/${u.username}`}
+                className="flex-1 text-center border border-gray-300 text-gray-800 py-1 rounded-lg hover:bg-gray-100 transition"
+              >
                 Hire
-              </button>
-             
+              </Link>
             </div>
           </div>
         ))}
