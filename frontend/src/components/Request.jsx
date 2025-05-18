@@ -32,17 +32,24 @@ export default function Request() {
   };
 
   const handleDecision = async (notifId, projectId, userId, action) => {
-    try {
-      await client.post(
-        `/projects/handle-request/${projectId}`,
-        { userId, action }
-      );
-      setResults(r => ({ ...r, [notifId]: action }));
-    } catch (err) {
-      console.error('handle-request failed', err);
-      alert(err.response?.data?.message || 'Action failed');
-    }
-  };
+  try {
+    // Step 1: Handle the accept/reject logic
+    await client.post(`/projects/handle-request/${projectId}`, {
+      userId,
+      action,
+    });
+
+    // Step 2: Delete the notification from DB
+    await client.delete(`/${notifId}`);
+
+    // Step 3: Remove it from UI
+    setNotes(prev => prev.filter(n => n._id !== notifId));
+  } catch (err) {
+    console.error('handle-request failed', err);
+    alert(err.response?.data?.message || 'Action failed');
+  }
+};
+
 
   if (loading) return <div className="flex items-center justify-center h-screen">Loading…</div>;
   if (error)   return <p className="text-red-500 text-center mt-6">{error}</p>;
