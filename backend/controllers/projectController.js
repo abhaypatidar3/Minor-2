@@ -457,3 +457,17 @@ export const sendProjectRequestToUser = catchAsyncErrors(async (req, res, next) 
     message: "Project request sent with proposed amount.",
   });
 });
+
+
+export const getCoworkerProjects = async (req, res) => {
+  try {
+    const userEmail = req.user.email; // assuming your auth middleware sets req.user.email
+
+    const projects = await Project.find({ coWorkers: userEmail });
+
+    res.status(200).json({ projects });
+  } catch (error) {
+    console.error('Error fetching coworker projects:', error);
+    res.status(500).json({ message: 'Failed to fetch coworker projects' });
+  }
+};
