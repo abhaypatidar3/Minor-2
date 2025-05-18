@@ -1,13 +1,35 @@
-import React, { useState } from 'react';
+// src/components/Login.jsx
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { HiOutlineMail, HiOutlineLockClosed, HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
+import {
+  HiOutlineMail,
+  HiOutlineLockClosed,
+  HiOutlineEye,
+  HiOutlineEyeOff
+} from 'react-icons/hi';
 import client from '../api/client';
 
 export default function Login() {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword]   = useState(false);
+  const [error, setError]                 = useState('');
+  const [loading, setLoading]             = useState(true);
+  const [loggedIn, setLoggedIn]           = useState(false);
   const navigate = useNavigate();
+
+  // on mount, check auth status
+  useEffect(() => {
+    (async () => {
+      try {
+        await client.get('/user/me');
+        setLoggedIn(true);
+      } catch {
+        setLoggedIn(false);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -19,12 +41,52 @@ export default function Login() {
     setError('');
     try {
       await client.post('/user/login', credentials);
+      setLoggedIn(true);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await client.get('/user/logout');
+    } catch {
+      // ignore errors
+    } finally {
+      setLoggedIn(false);
+      navigate('/login');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Checking authentication…</p>
+      </div>
+    );
+  }
+
+  // if already logged in, show logout only
+  if (loggedIn) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center px-4">
+        <div className="w-full max-w-md bg-gray-800 rounded-2xl p-8 shadow-xl text-center">
+          <h2 className="text-3xl font-bold text-yellow-400 mb-4">
+            You’re already logged in
+          </h2>
+          <button
+            onClick={handleLogout}
+            className="w-full bg-red-500 text-white font-semibold py-2 rounded-full hover:opacity-90 transition"
+          >
+            Log Out
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // otherwise show login form
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-gray-800 rounded-2xl p-8 shadow-xl transform hover:-translate-y-1 transition-all">
@@ -33,20 +95,15 @@ export default function Login() {
         </h2>
 
         {error && (
-          <p className="mt-4 text-red-500 text-center">
-            {error}
-          </p>
+          <p className="mt-4 text-red-500 text-center">{error}</p>
         )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-          {/* Email Field */}
           <div className="relative">
-            <label htmlFor="email" className="sr-only">Email</label>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <HiOutlineMail size={20} />
             </span>
             <input
-              id="email"
               name="email"
               type="email"
               value={credentials.email}
@@ -57,14 +114,11 @@ export default function Login() {
             />
           </div>
 
-          {/* Password Field */}
           <div className="relative">
-            <label htmlFor="password" className="sr-only">Password</label>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <HiOutlineLockClosed size={20} />
             </span>
             <input
-              id="password"
               name="password"
               type={showPassword ? 'text' : 'password'}
               value={credentials.password}
@@ -81,11 +135,10 @@ export default function Login() {
             >
               {showPassword
                 ? <HiOutlineEyeOff size={20} />
-                : <HiOutlineEye size={20} />}
+                : <HiOutlineEye     size={20} />}
             </button>
           </div>
 
-          {/* Forgot & Submit */}
           <div className="flex items-center justify-between">
             <Link
               to="/forgot-password"
@@ -97,7 +150,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full mt-4 bg-yellow-400 text-black font-semibold py-2 rounded-full hover:opacity-90 transition"
+            className="w-full bg-yellow-400 text-black font-semibold py-2 rounded-full hover:opacity-90 transition"
           >
             Log In
           </button>
@@ -105,7 +158,10 @@ export default function Login() {
 
         <p className="mt-6 text-center text-gray-400">
           Don’t have an account?{' '}
-          <Link to="/register" className="text-yellow-400 hover:underline transition">
+          <Link
+            to="/register"
+            className="text-yellow-400 hover:underline transition"
+          >
             Sign up
           </Link>
         </p>
