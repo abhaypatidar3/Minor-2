@@ -7,6 +7,7 @@ import ProfileReviews from './ProfileReview';
 import MyProjects from './MyProject';
 import Request from './Request';
 import CoWorkerProject from './CoWorkerProject';
+import { Link } from 'react-router-dom';
 
 const menuItems = [
   'Overview',
@@ -63,7 +64,12 @@ export default function ProfileDashboard() {
                   <FiCheckCircle className="text-green-500" /> <span>Available</span>
                 </div>
               </div>
-              <button className="ml-auto px-4 py-2 bg-black text-white rounded-full">Hire Me</button>
+             <Link
+  to={`/hire/${user.email.split('@')[0]}`}
+  className="ml-auto px-4 py-2 bg-black text-white rounded mr-10"
+>
+  Hire Me
+</Link>
             </div>
             {/* Skills */}
             <div className="mb-6">

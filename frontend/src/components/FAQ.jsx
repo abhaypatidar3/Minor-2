@@ -29,42 +29,55 @@ const faqs = [
   },
 ];
 
+// A set of tailwind gradient classes to cycle through
+const gradients = [
+  'from-blue-800 to-blue-400',
+];
+
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
 
-  const toggle = idx => {
-    setOpenIndex(openIndex === idx ? null : idx);
-  };
+  const toggle = idx => setOpenIndex(openIndex === idx ? null : idx);
 
   return (
-    <div className="bg-white py-16 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-yellow-50 to-blue-50 py-20 px-4">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-4xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-5xl font-extrabold text-center bg-clip-text text-transparent mb-12 bg-gradient-to-r from-purple-400 to-pink-500">
           Frequently Asked Questions
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-6">
           {faqs.map((item, idx) => {
             const isOpen = idx === openIndex;
+            const grad = gradients[idx % gradients.length];
             return (
               <div
                 key={idx}
-                className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
+                className={`
+                  rounded-2xl overflow-hidden transform transition
+                  ${isOpen ? 'scale-105 shadow-2xl' : 'shadow-lg hover:shadow-xl'}
+                  bg-gradient-to-r ${grad}
+                `}
               >
                 <button
                   onClick={() => toggle(idx)}
-                  className="w-full flex justify-between items-center p-4 bg-gray-50 focus:outline-none"
+                  className="w-full flex justify-between items-center px-6 py-5 focus:outline-none"
                 >
-                  <span className="text-lg font-medium text-gray-800">
+                  <span
+                    className={`
+                      text-xl font-semibold transition-colors
+                      text-white
+                    `}
+                  >
                     {item.question}
                   </span>
                   {isOpen ? (
-                    <HiOutlineChevronUp className="text-gray-600" />
+                    <HiOutlineChevronUp className="text-white text-2xl" />
                   ) : (
-                    <HiOutlineChevronDown className="text-gray-600" />
+                    <HiOutlineChevronDown className="text-white text-2xl" />
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 bg-white text-gray-700 leading-relaxed">
+                  <div className="px-6 pb-6 pt-2 bg-white/80 text-gray-800 leading-relaxed">
                     {item.answer}
                   </div>
                 )}

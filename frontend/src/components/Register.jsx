@@ -43,131 +43,91 @@ export default function Register() {
     }
   };
 
-  const inputClasses =
-    'w-full pl-10 pr-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-yellow-400';
+  const inputBase =
+    'w-full pl-10 pr-4 py-2 bg-gray-800 text-white border-2 border-transparent rounded-lg focus:outline-none transition';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center px-4">
-      <div className="w-full max-w-lg bg-gray-800 rounded-2xl p-8 shadow-xl transform hover:-translate-y-1 transition-all">
-        <h2 className="text-3xl font-bold text-center text-yellow-400">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-500 to-gray-800 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-lg bg-gray-400 bg-opacity-90 rounded-3xl p-10 shadow-2xl backdrop-blur-sm">
+        <h2 className="text-4xl font-extrabold text-center text-yellow-400 mb-6">
           Create Your SkillSwap Account
         </h2>
+
         {error && (
-          <p className="mt-4 text-red-500 text-center">
+          <div className="mb-4 p-3 bg-red-600 bg-opacity-70 text-white rounded">
             {error}
-          </p>
+          </div>
         )}
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-          {/* Name */}
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-              <HiOutlineUser size={20} />
-            </span>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Full Name"
-              className={inputClasses}
-            />
-          </div>
-
-          {/* Email */}
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-              <HiOutlineMail size={20} />
-            </span>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Email Address"
-              className={inputClasses}
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {[
+            { name: 'name',     placeholder: 'Full Name',     icon: HiOutlineUser,       type: 'text' },
+            { name: 'email',    placeholder: 'Email Address', icon: HiOutlineMail,       type: 'email' },
+            { name: 'phone',    placeholder: 'Phone Number',  icon: HiOutlinePhone,      type: 'tel' },
+          ].map(({ name, placeholder, icon: Icon, type }) => (
+            <div key={name} className="relative">
+              <Icon className="absolute inset-y-0 left-3 my-auto text-gray-400" size={20} />
+              <input
+                name={name}
+                type={type}
+                value={formData[name]}
+                onChange={handleChange}
+                placeholder={placeholder}
+                required
+                className={`${inputBase} focus:border-yellow-400`}
+              />
+            </div>
+          ))}
 
           {/* Password */}
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-              <HiOutlineLockClosed size={20} />
-            </span>
+            <HiOutlineLockClosed className="absolute inset-y-0 left-3 my-auto text-gray-400" size={20} />
             <input
-              id="password"
               name="password"
               type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleChange}
-              required
               placeholder="Password"
-              className={`${inputClasses} pr-12`}
+              required
+              className={`${inputBase} pr-12 focus:border-yellow-400`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(v => !v)}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400"
+              className="absolute inset-y-0 right-3 flex items-center text-gray-400"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <HiOutlineEyeOff size={20} /> : <HiOutlineEye size={20} />}
             </button>
           </div>
 
-          {/* Phone */}
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-              <HiOutlinePhone size={20} />
-            </span>
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              placeholder="Phone Number"
-              className={inputClasses}
-            />
-          </div>
-
           {/* Address */}
           <div className="relative">
-            <span className="absolute top-2 left-0 flex items-start pl-3 text-gray-400">
-              <HiOutlineHome size={20} />
-            </span>
+            <HiOutlineHome className="absolute top-3 left-3 text-gray-400" size={20} />
             <textarea
-              id="address"
               name="address"
               rows="2"
               value={formData.address}
               onChange={handleChange}
               required
               placeholder="Address"
-              className={`${inputClasses} resize-none pl-10 py-2`}
+              className={`${inputBase} resize-none pt-3 focus:border-yellow-400`}
             />
           </div>
 
           {/* Skills */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {['firstSkill', 'secondSkill', 'thirdSkill'].map((field, i) => (
               <div key={field} className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                  <HiOutlineHashtag size={20} />
-                </span>
+                <HiOutlineHashtag className="absolute inset-y-0 left-3 my-auto text-gray-400" size={20} />
                 <input
-                  id={field}
                   name={field}
                   type="text"
                   value={formData[field]}
                   onChange={handleChange}
                   required
                   placeholder={`Skill ${i + 1}`}
-                  className={inputClasses}
+                  className={`${inputBase} focus:border-yellow-400`}
                 />
               </div>
             ))}
@@ -175,15 +135,15 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full mt-2 bg-yellow-400 text-black font-semibold py-2 rounded-full hover:opacity-90 transition"
+            className="w-full mt-2 py-3 bg-yellow-400 text-black font-bold rounded-full shadow hover:shadow-lg transform hover:-translate-y-0.5 transition"
           >
-            Register
+            Sign Up
           </button>
         </form>
 
         <p className="mt-6 text-center text-gray-400">
           Already have an account?{' '}
-          <Link to="/login" className="text-yellow-400 hover:underline transition">
+          <Link to="/login" className="text-yellow-400 hover:text-yellow-300 font-medium transition">
             Log in
           </Link>
         </p>

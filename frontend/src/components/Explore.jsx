@@ -1,11 +1,39 @@
 import React from "react";
 import { FiSearch, FiUserPlus, FiRefreshCw, FiUserCheck } from "react-icons/fi";
 import { Link } from "react-router-dom";
-const Explore = () => {
+
+const cards = [
+  {
+    icon: <FiSearch size={24} />,
+    title: "Explore Skills",
+    desc: "Browse available talents by category or availability.",
+    to: "/exploreProfile",
+  },
+  {
+    icon: <FiUserPlus size={24} />,
+    title: "Hire Talent",
+    desc: "Post a hiring request or hire someone directly.",
+    to: "/hireme",
+  },
+  {
+    icon: <FiRefreshCw size={24} />,
+    title: "Project Collaboration",
+    desc: "Collaborate on a project with someone else.",
+    to: "/projects",
+  },
+  {
+    icon: <FiUserCheck size={24} />,
+    title: "Manage Profile",
+    desc: "Update skills, bio, endorsements, availability.",
+    to: "/getProfile",
+  },
+];
+
+export default function Explore() {
   return (
-    <div className="bg-white py-16 px-4">
+    <div className="bg-gray-200 py-16 px-4">
       <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-4xl font-bold text-gray-900">
+        <h1 className="text-4xl font-extralight text-gray-900">
           Let’s Get You Connected.
         </h1>
         <p className="mt-2 text-gray-600">
@@ -13,88 +41,34 @@ const Explore = () => {
         </p>
       </div>
 
-      <div className="mt-12 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Explore Skills Card */}
-        <div className="bg-black rounded-2xl p-6 flex flex-col justify-between transform transition duration-300 hover:scale-105">
-          <div className="flex items-center space-x-4">
-            <div className="p-4 bg-gray-800 rounded-full">
-              <FiSearch className="text-white text-2xl" />
-            </div>
-            <h2 className="text-xl font-semibold text-white">Explore Skills</h2>
-          </div>
-          <p className="mt-4 text-gray-400">
-            Browse available talents by category or availability.
-          </p>
-
-          <Link
-            to="/exploreProfile"
-            className="self-end mt-6 inline-block bg-yellow-400 text-black font-medium py-2 px-4 rounded-full hover:opacity-90"
+      <div className="mt-12 max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8">
+        {cards.map(({ icon, title, desc, to }) => (
+          <div
+            key={title}
+            className="relative rounded-2xl p-8 flex flex-col justify-between overflow-hidden group hover:shadow-2xl transition bg-yellow-900"
           >
-            Explore
-          </Link>
-        </div>
+            {/* Gradient overlay accent */}
+            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-yellow-600 opacity-0 group-hover:opacity-20 transition" />
 
-        {/* Hire Talent Card */}
-        <div className="bg-black rounded-2xl p-6 flex flex-col justify-between transform transition duration-300 hover:scale-105">
-          <div className="flex items-center space-x-4">
-            <div className="p-4 bg-gray-800 rounded-full">
-              <FiUserPlus className="text-white text-2xl" />
+            {/* Content */}
+            <div className="relative z-10 flex items-center space-x-4">
+              <div className="p-3 bg-gray-800 rounded-full text-yellow-400">
+                {icon}
+              </div>
+              <h2 className="text-2xl font-semibold text-white">{title}</h2>
             </div>
-            <h2 className="text-xl font-semibold text-white">Hire Talent</h2>
-          </div>
-          <p className="mt-4 text-gray-400">
-            Post a hiring request or hire someone directly.
-          </p>
-          <Link
-            to="/hireme"
-            className="self-end mt-6 bg-yellow-400 text-black font-medium py-2 px-4 rounded-full hover:opacity-90"
-          >
-            Explore
-          </Link>
-        </div>
+            <p className="relative z-10 mt-4 text-gray-300">{desc}</p>
 
-        {/* Skill Exchange Card */}
-        <div className="bg-black rounded-2xl p-6 flex flex-col justify-between transform transition duration-300 hover:scale-105">
-          <div className="flex items-center space-x-4">
-            <div className="p-4 bg-gray-800 rounded-full">
-              <FiRefreshCw className="text-white text-2xl" />
-            </div>
-            <h2 className="text-xl font-semibold text-white">
-              Project collaboration
-            </h2>
+            <Link
+              to={to}
+              className="relative z-10 self-end mt-6 inline-flex items-center space-x-2 bg-yellow-400 text-black font-medium py-2 px-5 rounded-full shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition"
+            >
+              <span>Explore</span>
+              <FiSearch className="text-black" />
+            </Link>
           </div>
-          <p className="mt-4 text-gray-400">
-            Collborate on a project with someone else.
-          </p>
-          <Link
-            to="/projects"
-            className="self-end mt-6 bg-yellow-400 text-black font-medium py-2 px-4 rounded-full hover:opacity-90"
-          >
-            Explore
-          </Link>
-        </div>
-
-        {/* Manage Profile Card */}
-        <div className="bg-black rounded-2xl p-6 flex flex-col justify-between transform transition duration-300 hover:scale-105">
-          <div className="flex items-center space-x-4">
-            <div className="p-4 bg-gray-800 rounded-full">
-              <FiUserCheck className="text-white text-2xl" />
-            </div>
-            <h2 className="text-xl font-semibold text-white">Manage Profile</h2>
-          </div>
-          <p className="mt-4 text-gray-400">
-            Update skills, bio, endorsements, availability.
-          </p>
-          <Link
-            to="/getProfile"
-            className="self-end mt-6 bg-yellow-400 text-black font-medium py-2 px-4 rounded-full hover:opacity-90"
-          >
-            Explore
-          </Link>
-        </div>
+        ))}
       </div>
     </div>
   );
-};
-
-export default Explore;
+}
