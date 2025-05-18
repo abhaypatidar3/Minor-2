@@ -6,6 +6,7 @@ import CreateProject from './CreateProject';
 import ProfileReviews from './ProfileReview';
 import MyProjects from './MyProject';
 import Request from './Request';
+import CoWorkerProject from './CoWorkerProject';
 
 const menuItems = [
   'Overview',
@@ -90,6 +91,8 @@ export default function ProfileDashboard() {
         return <MyProjects/>;
       case 'Requests':
         return <Request />;  
+      case 'Co-Worker project':
+        return <CoWorkerProject/>;
       default:
         return <p>{activeTab} content coming soon...</p>;
     }
