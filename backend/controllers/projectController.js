@@ -212,9 +212,16 @@ export const requestToJoinProject = catchAsyncErrors(async (req, res, next) => {
   }
 
   await Notification.create({
-    user: project.founder.email,
-    message: `${req.user.email} has requested to join your project "${project.name}".`,
-  });
+  user: project.founder.email,
+  message: `${req.user.email} has requested to join your project "${project.name}".`,
+  metadata: {
+    projectId: project._id,
+    senderEmail: req.user.email,
+    userName: req.user.name, 
+    skills: req.user.skills, 
+    message: req.body.customMessage || null,
+  },
+});
 
   // Determine message based on project type
   let message;
