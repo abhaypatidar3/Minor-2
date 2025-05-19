@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import validator from "validator";
 
@@ -34,13 +34,6 @@ const userSchema = new mongoose.Schema({
         minlength: [8, "Password must contain at least 8 characters"],
         maxlength: [32, "Password must contain less than 32 characters"],
         select: false,
-    },
-    resume: {
-        public_id: String,
-        url: String,
-    },
-    coverLetter: {
-        type: String,
     },
     status: {
         type: String,
