@@ -11,7 +11,9 @@ const SearchBySkill = () => {
   useEffect(() => {
     // Fetch skill list from your backend
     axios
-      .get('/api/v1/skills')
+      .get('https://minor-2.onrender.com/api/v1/skills', {
+        withCredentials: true
+      })
       .then((res) => {
         setAllSkills(res.data.skills);    // expecting { skills: ['React', 'UI/UX', ...] }
       })
