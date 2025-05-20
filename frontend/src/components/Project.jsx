@@ -15,7 +15,7 @@ export default function Project() {
     const fetchProjects = async () => {
       setLoading(true);
       try {
-        const res = await client.get("/projects/");
+        const res = await client.get("/projects");
         const data = res.data.projects || res.data;
         const adapted = data.map((p) => ({
           id: p._id,
